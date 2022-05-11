@@ -3,13 +3,7 @@ param ($pcname);if(!$pcname){$pcname = Read-Host "Enter PC Name"};if(!$pcname){r
 $user = $env:USERDOMAIN + "\" + $env:USERNAME
 $userdetails = New-Object System.Security.Principal.NTAccount($user)
 
-#
-Get-Service UmRdpService -ComputerName $pcname | Stop-Service -PassThru -Force
-Get-Service TermService -ComputerName $pcname | Stop-Service -PassThru -Force
-
 $path = ("\\" + $pcname + "\C$\Windows\System32\termsrv.dll")
-$termsrv_dll_acl = Get-Acl $path
-Copy-Item $path ($path + ".copy")
 
 $termsrv_dll_acl = Get-Acl $path
 $termsrv_dll_acl.SetOwner($userdetails)
@@ -27,14 +21,10 @@ If ($checkPattern -ne $null) {
 $dll_as_text_replaced = $dll_as_text -replace $patternregex, $patch
 }
 Elseif (Select-String -Pattern $patch -InputObject $dll_as_text) {
-Get-Service UmRdpService -ComputerName $pcname | Start-Service -PassThru
-Get-Service TermService -ComputerName $pcname | Start-Service -PassThru
 Write-Output 'The termsrv.dll file is already patch, exiting'
 Exit
 }
 else {
-Get-Service UmRdpService -ComputerName $pcname | Start-Service -PassThru
-Get-Service TermService -ComputerName $pcname | Start-Service -PassThru
 Write-Output "Pattern not found"
 Exit
 }
@@ -53,8 +43,8 @@ Rename-Item ($path +".rename") $path -Force
 Set-Acl $path $termsrv_dll_acl
 
 #
-Get-Service UmRdpService -ComputerName $pcname | Start-Service -PassThru
-Get-Service TermService -ComputerName $pcname | Start-Service -PassThru
+Get-Service UmRdpService -ComputerName $pcname | Restart-Service -PassThru
+Get-Service TermService -ComputerName $pcname | Restart-Service -PassThru
 
 #
 Write-Host "Done RDP2RDP on PC: $pcname"
