@@ -3,17 +3,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Title="Tools V2" Height="450" Width="600" ResizeMode="NoResize"
-        Topmost="true" WindowStartupLocation="CenterScreen"
+		WindowStartupLocation="CenterScreen"
         WindowStyle="None" AllowsTransparency="true" Background="Transparent">
+        <!-- Topmost="true" --> <!-- #CAF0F8 --> <!-- #90E0EF --> <!-- #00B4D8 --> <!-- #0077B6 --> <!-- #03045E -->
     <Grid>
         <Image Name="BackgroundImage" VerticalAlignment="Top" HorizontalAlignment="Left" Width="600" Height="450"/>
 		
-		<Label Name="title" Content="title" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-3,0,0"/>
+		<Label Name="title" Content="title" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-3,0,0" Foreground="#90E0EF"/>
 		
-		<Label Content="הכנס פרטי המשתמש:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,20,0,0" Width="198" Height="23" FlowDirection="RightToLeft"/>
+		<Label Content="הכנס פרטי המשתמש:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,20,0,0" Width="198" Height="23" FlowDirection="RightToLeft" Foreground="#03045E"/>
         <TextBox Name="i_User" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="6,40,0,0" Width="190" Text="" FlowDirection="RightToLeft"/>
 		
-		<Label Content="הכנס פרטי המחשב:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,60,0,0" Width="198" Height="23" FlowDirection="RightToLeft"/>
+		<Label Content="הכנס פרטי המחשב:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,60,0,0" Width="198" Height="23" FlowDirection="RightToLeft" Foreground="#03045E"/>
         <TextBox Name="i_Computer" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="6,80,0,0" Width="190" Text="" FlowDirection="RightToLeft"/>
 
 		<TextBox Name="Console" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="1,278,0,0" Width="200" Height="150" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Black" Foreground ="White" IsReadOnly="True" FlowDirection="RightToLeft"/>
@@ -27,25 +28,24 @@
 		<Label Name="UserID" Content="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="306,281,0,0" Width="265" FlowDirection="RightToLeft"/>
 		
 		<Label Name="UserMobile_Label" Content="טל נייד:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="306,405,0,0" Width="289" FlowDirection="RightToLeft"/>
-		<TextBox Name="UserMobile" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="311,410,0,0" Width="230" IsReadOnly="True" Background="#99d8e8" BorderThickness="0" FlowDirection="RightToLeft"/>
+		<TextBox Name="UserMobile" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="311,410,0,0" Width="230" IsReadOnly="True" Background="#CAF0F8" BorderThickness="0" FlowDirection="RightToLeft"/>
 		
 		<Label Name="UserTelephone_Label" Content="טל נייח:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="306,405,0,0" Width="149" FlowDirection="RightToLeft"/>
-		<TextBox Name="UserTelephone" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="311,410,0,0" Width="90" IsReadOnly="True" Background="#99d8e8" BorderThickness="0" FlowDirection="RightToLeft"/>
+		<TextBox Name="UserTelephone" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="311,410,0,0" Width="90" IsReadOnly="True" Background="#CAF0F8" BorderThickness="0" FlowDirection="RightToLeft"/>
 		
 		<Label Name="UserPersonalDir_Label" Content="תיקיית רשת אישית:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="306,385,0,0" Width="289" FlowDirection="RightToLeft"/>
-		<TextBox Name="UserPersonalDir" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="311,390,0,0" Width="175" IsReadOnly="True" Background="#99d8e8" BorderThickness="0" FlowDirection="LeftToRight"/>
+		<TextBox Name="UserPersonalDir" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="311,390,0,0" Width="175" IsReadOnly="True" Background="#CAF0F8" BorderThickness="0" FlowDirection="LeftToRight"/>
 		
-		<Label Name="User_Missing_Label" Content="חסר פרטי המשתמש" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,48,0,0" Width="160" FlowDirection="RightToLeft" Foreground="Red"/>
-		<Label Name="Computer_Missing_Label" Content="חסר פרטי המחשב" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,88,0,0" Width="160" FlowDirection="RightToLeft" Foreground="Red"/>
-
+		<Label Name="Data_Output_Label" Content="Data_Output_Label" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="200,252,0,0" Width="400" FontWeight="Bold" HorizontalContentAlignment="Center" FlowDirection="RightToLeft" Foreground="#90E0EF"/>
+		<Label Name="Data_Version_Label" Content="Data_Version_Label" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,252,0,0" Width="200" HorizontalContentAlignment="Center" FlowDirection="RightToLeft" Foreground="#90E0EF"/>
 
 		<Button Name="btn_Close" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="581,2,0,0" Width="17" Height="17">
             <Image Name="btn_close_image"></Image>
         </Button>
 		
-		<Button Name="btn_Opt1" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="203,23,0,0" Width="395" Height="30" Content="מצא מידע על המשמש" Background="Black" Foreground="White" BorderThickness="0"/>
-		<Button Name="btn_Opt2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="203,54,0,0" Width="395" Height="30" Content="מצא מידע על המחשב" Background="Black" Foreground="White" BorderThickness="0"/>
-		<Button Name="btn_Opt3" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="203,85,0,0" Width="395" Height="30" Content="btn_Opt3 | btn_Opt3" Background="Black" Foreground="White" BorderThickness="0"/>	
+		<Button Name="btn_Opt1" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="203,23,0,0" Width="395" Height="30" Content="מצא מידע על המשמש" Background="#00B4D8" Foreground="#03045E" BorderThickness="0"/>
+		<Button Name="btn_Opt2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="203,54,0,0" Width="395" Height="30" Content="מצא מידע על המחשב" Background="#00B4D8" Foreground="#03045E" BorderThickness="0"/>
+		<Button Name="btn_Opt3" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="203,85,0,0" Width="395" Height="30" Content="btn_Opt3 | btn_Opt3" Background="#00B4D8" Foreground="#03045E" BorderThickness="0"/>	
 		
     </Grid>
 </Window>

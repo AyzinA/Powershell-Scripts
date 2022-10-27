@@ -1,4 +1,4 @@
-cls;
+﻿cls;
 Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, System.Windows.Forms, System.Drawing
 
 function DecodeBin($bin){
@@ -42,7 +42,7 @@ $viewForm = @{
 }
 
 #$bin = Get-Content "$pwd\data.bin"
-$bin = Get-Content "\\MPC43\C$\Users\alexanderay\Documents\aa\data.bin"
+$bin = Get-Content "C:\Users\Alexander Ayzin\Documents\TOOLS 2\data.bin"
 $data = DecodeBin($bin)
 
 $BackgroundImageBin = DecodeBase64Image $data[0]
@@ -54,7 +54,7 @@ do{
 $viewForm.reset = $false
 
 #[xml]$xaml = (Get-Content -Encoding UTF8 -Path "$pwd\menu.xml" -Raw) -replace 'x:Name','Name'
-[xml]$xaml = (Get-Content -Encoding UTF8 -Path "\\MPC43\C$\Users\alexanderay\Documents\aa\menu.xml" -Raw) -replace 'x:Name','Name'
+[xml]$xaml = (Get-Content -Encoding UTF8 -Path "C:\Users\Alexander Ayzin\Documents\TOOLS 2\menu.xml" -Raw) -replace 'x:Name','Name'
 $xaml.Window.RemoveAttribute('x:Class')
 $xaml.Window.RemoveAttribute('mc:Ignorable')
 $xaml.SelectNodes("//*") | ForEach-Object {$_.RemoveAttribute('d:LayoutOverrides')}
@@ -66,8 +66,7 @@ $xaml.SelectNodes("//*[@*[contains(translate(name(.),'n','N'),'Name')]]") | ForE
 }
 catch{Write-Host "Unable to load Windows.Markup.XamlReader";exit}
 
-$User_Missing_Label.Visibility = "Hidden"
-$Computer_Missing_Label.Visibility = "Hidden"
+$Data_Output_Label.Visibility = "Hidden"
 $btn_Opt3.Visibility = "Hidden"
 
 $Form.Height = 278;
@@ -86,7 +85,7 @@ if($viewForm.working -eq $true){return}
 
 $viewForm.working = $true
 
-if($i_User.Text -eq ""){$User_Missing_Label.Visibility = "Visible";$viewForm.working = $false;return}
+if($i_User.Text -eq ""){$Data_Output_Label.Visibility = "Visible";$Data_Output_Label.Content = "USER";$viewForm.working = $false;return}
 
 $UserProfileImage.Source = $nul
 $UserDisplayName.Content = ""
@@ -98,9 +97,10 @@ $UserMobile.Text = ""
 $UserTelephone.Text = ""
 $UserPersonalDir.Text = ""
 
-$User_Missing_Label.Visibility = "Hidden"
-Debug.newlog("LOADING DATA FROM SERVER...")
-$Form.Height = 450;
+$Data_Output_Label.Visibility = "Visible"
+$Data_Output_Label.Content = "LOADING DATA FROM SERVER..."
+if($Form.Height -ge 450 -and $Form.Height -le 450.5){$Form.Height = $Form.Height +1}else{$Form.Height = 450}
+$Data_Output_Label.Visibility = "Hidden"
 
 DEBUG.CLS
 
@@ -157,11 +157,12 @@ if($viewForm.working -eq $true){return}
 
 $viewForm.working = $true
 
-if($i_Computer.Text -eq ""){$Computer_Missing_Label.Visibility = "Visible";$viewForm.working = $false;return}
+if($i_Computer.Text -eq ""){$Data_Output_Label.Visibility = "Visible";$Data_Output_Label.Content = "PC";$viewForm.working = $false;return}
 
-$Computer_Missing_Label.Visibility = "Hidden"
-Debug.newlog("LOADING DATA FROM SERVER...")
+$Data_Output_Label.Visibility = "Visible"
+$Data_Output_Label.Content = "LOADING DATA FROM SERVER..."
 if($Form.Height -ge 450 -and $Form.Height -le 450.5){$Form.Height = $Form.Height +1}else{$Form.Height = 450}
+$Data_Output_Label.Visibility = "Hidden"
 
 $pc_data = $i_Computer.Text;$pinfo = $nul;$pc_data_current_user = $nul
 if($pc_data -match "^[\d\.]+$"){$ip = $pc_data;$pcn = (Get-WmiObject Win32_ComputerSystem -ComputerName $pc_data -ErrorAction SilentlyContinue).Name;if($pcn -eq $nul){Debug.newlog("מחשב לא נמצא לפי כתובת תחנה - $ip");$viewForm.working = $false;return}}
@@ -241,7 +242,7 @@ $Form.add_MouseLeftButtonDown({$_.handled=$true;$this.DragMove()})
 
 $Form.Add_KeyDown({if($viewForm.working -eq $false -and $_.Key -eq 'F12'){$viewForm.reset = $true;$Form.Close()}})
 
-$v = "Test Version 2.22.10.04";$v;#$v | Out-File "$env:USERPROFILE\Desktop\TOOLS2_LOG.LOG" -Append
+$Data_Version_Label.Content = "Test Version 2.22.10.04"
 
 [void]$Form.ShowDialog()
 
