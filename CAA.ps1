@@ -30,7 +30,7 @@ catch {
 
 # Step 2: Download and install the endpoint
 Invoke-WebRequest -Uri $downloadUrl -OutFile $installPath
-Start-Process -FilePath $installPath -Wait
+Start-Process -FilePath $installPath -ArgumentList "/silent", "/install" -Wait
 Write-Host "Endpoint installation completed."
 
 # Step 3: Update Chrome
