@@ -19,21 +19,7 @@ $chromeInstallerURL = "https://dl.google.com/chrome/install/latest/chrome_instal
 # Specify the path where you want to save the installer
 $chromeInstallerPath = Join-Path $tempFolderPath " chrome_installer.exe"
 
-# Step 1: Delete the registry key
-try {
-    Remove-ItemProperty -Path $registryPath -Name "YourValueName" -ErrorAction Stop
-    Write-Host "Registry key deleted successfully."
-}
-catch {
-    Write-Host "Failed to delete the registry key."
-}
-
-# Step 2: Download and install the endpoint
-Invoke-WebRequest -Uri $downloadUrl -OutFile $installPath
-Start-Process -FilePath $installPath -Wait
-Write-Host "Endpoint installation completed."
-
-# Step 3: Update Chrome
+# Step 1: Update Chrome
 $chromeVersion = (Get-ItemProperty "HKLM:\SOFTWARE\Wow6432Node\Google\Update\ClientState\{8A69D345-D564-463C-AFF1-A69D9E530F96}").pv
 if ($chromeVersion -ne $null) {
     Write-Host "Current Chrome version: $chromeVersion"
@@ -46,6 +32,20 @@ if ($chromeVersion -ne $null) {
     Write-Host "Chrome update completed."
 } else {
     Write-Host "Unable to determine the current Chrome version."
+}
+
+# Step 2: Download and install the endpoint
+Invoke-WebRequest -Uri $downloadUrl -OutFile $installPath
+Start-Process -FilePath $installPath -Wait
+Write-Host "Endpoint installation completed."
+
+# Step 3: Delete the registry key
+try {
+    Remove-ItemProperty -Path $registryPath -Name "YourValueName" -ErrorAction Stop
+    Write-Host "Registry key deleted successfully."
+}
+catch {
+    Write-Host "Failed to delete the registry key."
 }
 
 # Step 4: Delete the temporary folder
