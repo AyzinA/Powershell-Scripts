@@ -1,0 +1,85 @@
+
+# Define the URL of the webpage
+$webpageUrl = "https://www.microsoft.com/en-us/download/details.aspx?id=105219"
+
+# Use Invoke-WebRequest to get the HTML content of the webpage
+$response = Invoke-WebRequest -Uri $webpageUrl
+
+# Extract the download link using regex
+$downloadLink = [regex]::match($response.Content, 'https://download\.microsoft\.com[^"]+').Value
+
+# Check if a download link is found
+if (-not $downloadLink) {
+    Write-Host "Error: Unable to find the download link on the webpage."
+    exit
+}
+
+# Define a temporary folder path
+$tempFolder = Join-Path $env:TEMP "MDM TEST"
+
+# Create a temporary folder for downloads
+New-Item -ItemType Directory -Path $tempFolder -Force | Out-Null
+
+# Download and extract the zip file
+$zipFilePath = Join-Path $tempFolder "CompanyPortal.zip"
+Invoke-WebRequest -Uri $downloadLink -OutFile $zipFilePath
+Expand-Archive -Path $zipFilePath -DestinationPath $tempFolder -Force
+
+# Set the location to the extracted folder
+Set-Location -Path $tempFolder
+
+# Uninstall Workspace ONE Intelligent Hub Installer
+Get-WmiObject -Query "SELECT * FROM Win32_Product WHERE Name = 'Workspace ONE Intelligent Hub Installer'" | ForEach-Object {
+    $_.Uninstall()
+}
+
+# Remove directories
+$directoriesToRemove = @(
+    "$env:APPDATA\..\Local\VMware",
+    "$env:PROGRAMDATA\AirWatch",
+    "$env:PROGRAMDATA\AirWatchMDM",
+    "$env:PROGRAMDATA\VMware",
+    "$env:PROGRAMDATA\VMWOSQEXT"
+)
+
+Remove-Item -Path $directoriesToRemove -Recurse -Force 2>null
+
+# Install App Bundles
+Write-Host "Installing App Bundles..."
+Add-AppxPackage -Path ".\0357d441a66f4fd184c2607a89bff325.appxbundle"
+
+# Install App Packages
+$packages = @(
+    "Microsoft.NET.Native.Framework.2.2_2.2.29512.0_arm64__8wekyb3d8bbwe.appx",
+    "Microsoft.NET.Native.Framework.2.2_2.2.29512.0_arm64__8wekyb3d8bbwe.appx",
+    "Microsoft.NET.Native.Framework.2.2_2.2.29512.0_arm__8wekyb3d8bbwe.appx",
+    "Microsoft.NET.Native.Framework.2.2_2.2.29512.0_x64__8wekyb3d8bbwe.appx",
+    "Microsoft.NET.Native.Framework.2.2_2.2.29512.0_x86__8wekyb3d8bbwe.appx",
+    "Microsoft.NET.Native.Runtime.2.2_2.2.28604.0_arm64__8wekyb3d8bbwe.appx",
+    "Microsoft.NET.Native.Runtime.2.2_2.2.28604.0_arm__8wekyb3d8bbwe.appx",
+    "Microsoft.NET.Native.Runtime.2.2_2.2.28604.0_x64__8wekyb3d8bbwe.appx",
+    "Microsoft.NET.Native.Runtime.2.2_2.2.28604.0_x86__8wekyb3d8bbwe.appx",
+    "Microsoft.Services.Store.Engagement_10.0.19011.0_arm64__8wekyb3d8bbwe.appx",
+    "Microsoft.Services.Store.Engagement_10.0.19011.0_arm__8wekyb3d8bbwe.appx",
+    "Microsoft.Services.Store.Engagement_10.0.19011.0_x64__8wekyb3d8bbwe.appx",
+    "Microsoft.Services.Store.Engagement_10.0.19011.0_x86__8wekyb3d8bbwe.appx",
+    "Microsoft.UI.Xaml.2.7_7.2208.15002.0_arm64__8wekyb3d8bbwe.appx",
+    "Microsoft.UI.Xaml.2.7_7.2208.15002.0_arm__8wekyb3d8bbwe.appx",
+    "Microsoft.UI.Xaml.2.7_7.2208.15002.0_x64__8wekyb3d8bbwe.appx",
+    "Microsoft.UI.Xaml.2.7_7.2208.15002.0_x86__8wekyb3d8bbwe.appx",
+    "Microsoft.VCLibs.140.00_14.0.30704.0_arm64__8wekyb3d8bbwe.appx",
+    "Microsoft.VCLibs.140.00_14.0.30704.0_arm__8wekyb3d8bbwe.appx",
+    "Microsoft.VCLibs.140.00_14.0.30704.0_x64__8wekyb3d8bbwe.appx",
+    "Microsoft.VCLibs.140.00_14.0.30704.0_x86__8wekyb3d8bbwe.appx"
+)
+
+foreach ($package in $packages) {
+    Write-Host "Installing $package..."
+    Add-AppxPackage -Path ".\$package" 2>$null
+}
+
+Write-Host "Installation complete."
+
+# Launch Company Portal
+Write-Host "Launching Company Portal..."
+Start-Process "C:\Program Files\WindowsApps\Microsoft.CompanyPortal_11.2.58.0_x64__8wekyb3d8bbwe\CompanyPortal.exe"
