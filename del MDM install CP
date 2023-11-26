@@ -127,6 +127,10 @@ if ($install -eq "v1") {
     DownloadCompanyPortalVer1
 } elseif ($install -eq "v2") {
     DownloadCompanyPortalVer2
+} else {
+DeleteWSOne
+DownloadCompanyPortalVer1
+UpgradeCompanyPortal
 }
 
 if ($upgrade) {
