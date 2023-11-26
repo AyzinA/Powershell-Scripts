@@ -131,6 +131,7 @@ if ($install -eq "v1") {
 DeleteWSOne
 DownloadCompanyPortalVer1
 UpgradeCompanyPortal
+exit
 }
 
 if ($upgrade) {
