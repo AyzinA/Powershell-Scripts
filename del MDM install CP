@@ -1,3 +1,27 @@
+param (
+    [alias("i")]
+    [string]$install,
+
+    [alias("d")]
+    [switch]$deleteWSOne,
+
+    [alias("u")]
+    [switch]$upgrade
+)
+
+function DownloadCompanyPortalVer1{
+
+winget install -e --name "Company Portal" --source=msstore --accept-source-agreements --accept-package-agreements --silent
+
+$appPath = (Get-AppxPackage | Where-Object { $_.Name -eq "Microsoft.CompanyPortal" }).InstallLocation
+
+# Launch Company Portal
+#Write-Host "Launching Company Portal..."
+Start-Process "$appPath\CompanyPortal.exe"
+
+}
+
+function DownloadCompanyPortalVer2{
 
 # Define the URL of the webpage
 $webpageUrl = "https://www.microsoft.com/en-us/download/details.aspx?id=105219"
@@ -15,7 +39,7 @@ if (-not $downloadLink) {
 }
 
 # Define a temporary folder path
-$tempFolder = Join-Path $env:TEMP "MDM TEST"
+$tempFolder = Join-Path $env:TEMP "temp1337"
 
 # Create a temporary folder for downloads
 New-Item -ItemType Directory -Path $tempFolder -Force | Out-Null
@@ -28,24 +52,8 @@ Expand-Archive -Path $zipFilePath -DestinationPath $tempFolder -Force
 # Set the location to the extracted folder
 Set-Location -Path $tempFolder
 
-# Uninstall Workspace ONE Intelligent Hub Installer
-Get-WmiObject -Query "SELECT * FROM Win32_Product WHERE Name = 'Workspace ONE Intelligent Hub Installer'" | ForEach-Object {
-    $_.Uninstall()
-}
-
-# Remove directories
-$directoriesToRemove = @(
-    "$env:APPDATA\..\Local\VMware",
-    "$env:PROGRAMDATA\AirWatch",
-    "$env:PROGRAMDATA\AirWatchMDM",
-    "$env:PROGRAMDATA\VMware",
-    "$env:PROGRAMDATA\VMWOSQEXT"
-)
-
-Remove-Item -Path $directoriesToRemove -Recurse -Force 2>null
-
 # Install App Bundles
-Write-Host "Installing App Bundles..."
+#Write-Host "Installing App Bundles..."
 Add-AppxPackage -Path ".\0357d441a66f4fd184c2607a89bff325.appxbundle"
 
 # Install App Packages
@@ -74,12 +82,57 @@ $packages = @(
 )
 
 foreach ($package in $packages) {
-    Write-Host "Installing $package..."
+    #Write-Host "Installing $package..."
     Add-AppxPackage -Path ".\$package" 2>$null
 }
 
-Write-Host "Installation complete."
+Remove-Item -Path $tempFolder -Recurse -Force 2>null
+
+#Write-Host "Installation complete."
 
 # Launch Company Portal
-Write-Host "Launching Company Portal..."
+#Write-Host "Launching Company Portal..."
 Start-Process "C:\Program Files\WindowsApps\Microsoft.CompanyPortal_11.2.58.0_x64__8wekyb3d8bbwe\CompanyPortal.exe"
+
+}
+
+function UpgradeCompanyPortal{
+
+$app = (winget search -e "Company Portal" --source=msstore)[5].Split(" ")[2]
+winget upgrade -e --id $app
+
+}
+
+function DeleteWSOne{
+
+# Uninstall Workspace ONE Intelligent Hub Installer
+Get-WmiObject -Query "SELECT * FROM Win32_Product WHERE Name = 'Workspace ONE Intelligent Hub Installer'" | ForEach-Object {
+    $_.Uninstall()
+}
+
+# Remove directories
+$directoriesToRemove = @(
+    "$env:APPDATA\..\Local\VMware",
+    "$env:PROGRAMDATA\AirWatch",
+    "$env:PROGRAMDATA\AirWatchMDM",
+    "$env:PROGRAMDATA\VMware",
+    "$env:PROGRAMDATA\VMWOSQEXT"
+)
+
+Remove-Item -Path $directoriesToRemove -Recurse -Force 2>null
+
+}
+
+if ($install -eq "v1") {
+    DownloadCompanyPortalVer1
+} elseif ($install -eq "v2") {
+    DownloadCompanyPortalVer2
+}
+
+if ($upgrade) {
+    UpgradeCompanyPortal
+}
+
+if ($deleteWSOne) {
+    DeleteWSOne
+}
