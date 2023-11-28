@@ -110,6 +110,8 @@ Get-WmiObject -Query "SELECT * FROM Win32_Product WHERE Name = 'Workspace ONE In
     $_.Uninstall()
 }
 
+Disable-BitLocker -MountPoint "C:"
+
 # Remove directories
 $directoriesToRemove = @(
     "$env:APPDATA\..\Local\VMware",
