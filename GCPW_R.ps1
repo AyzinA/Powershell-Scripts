@@ -5,7 +5,7 @@ Windows administrator access is required to use the script. #>
 <# Set the following key to the domains you want to allow users to sign in from.
 
 For example:
-$domainsAllowedToLogin = "solarmora.com,altostrat.com"
+$domainsAllowedToLogin = "rapyd.net"
 #>
 
 $domainsAllowedToLogin = "rapyd.net"
@@ -50,9 +50,11 @@ $installProcess = (Start-Process msiexec.exe -ArgumentList $arguments -PassThru 
 <# Check if installation was successful #>
 if ($installProcess.ExitCode -ne 0) {
     $result = [System.Windows.MessageBox]::Show('Installation failed!', 'GCPW', 'OK', 'Error')
+    Remove-Item -Path $pwd\$gcpwFileName -Recurse -Force
     exit $installProcess.ExitCode
 }
 else {
+    Remove-Item -Path $pwd\$gcpwFileName -Recurse -Force
     $result = [System.Windows.MessageBox]::Show('Installation completed successfully!', 'GCPW', 'OK', 'Info')
 }
 
