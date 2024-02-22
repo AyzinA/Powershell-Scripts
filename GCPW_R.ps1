@@ -39,8 +39,8 @@ if ([Environment]::Is64BitOperatingSystem) {
 <# Download Google Chrome Installer. #>
 $chromeFileName = 'chrome_installer.exe'
 $chromeUrlPrefix = 'https://dl.google.com/chrome/install/latest/'
-$chromeUri = $gcpwUrlPrefix + $chromeFileName
-Write-Host 'Downloading Chrome from' $gcpwUri
+$chromeUri = $chromeUrlPrefix + $chromeFileName
+Write-Host 'Downloading Chrome from' $chromeUri
 Invoke-WebRequest -Uri $chromeUri -OutFile $chromeFileName
 
 <# Install Google Chrome. #>
@@ -49,11 +49,11 @@ $installProcess = (Start-Process -FilePath $chromeUri -ArgumentList "/silent", "
 <# Check if installation was successful #>
 if ($installProcess.ExitCode -ne 0) {
     $result = [System.Windows.MessageBox]::Show('Installation failed!', 'Chrome', 'OK', 'Error')
-    Remove-Item -Path $gcpwFileName -Recurse -Force
+    Remove-Item -Path $chromeFileName -Recurse -Force
     exit $installProcess.ExitCode
 }
 else {
-    Remove-Item -Path $gcpwFileName -Recurse -Force
+    Remove-Item -Path $chromeFileName -Recurse -Force
     $result = [System.Windows.MessageBox]::Show('Installation completed successfully!', 'Chrome', 'OK', 'Info')
 }
 
