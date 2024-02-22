@@ -44,7 +44,8 @@ Write-Host 'Downloading Chrome from' $chromeUri
 Invoke-WebRequest -Uri $chromeUri -OutFile $chromeFileName
 
 <# Install Google Chrome. #>
-$installProcess = (Start-Process -FilePath $chromeUri -ArgumentList "/silent", "/install" -Wait)
+$arguments = "/silent /install"
+$installProcess = (Start-Process -FilePath $chromeFileName -ArgumentList $arguments -PassThru -Wait)
 
 <# Check if installation was successful #>
 if ($installProcess.ExitCode -ne 0) {
