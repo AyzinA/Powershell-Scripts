@@ -43,8 +43,8 @@ Write-Host 'Downloading GCPW from' $gcpwUri
 Invoke-WebRequest -Uri $gcpwUri -OutFile $gcpwFileName
 
 <# Run the GCPW installer and wait for the installation to finish #>
-$arguments = "/silent /install `"$gcpwFileName`""
-$installProcess = (Start-Process msiexec.exe -ArgumentList $arguments -PassThru -Wait)
+$arguments = "/silent /install"
+$installProcess = (Start-Process $gcpwFileName -ArgumentList $arguments -PassThru -Wait)
 
 <# Check if installation was successful #>
 if ($installProcess.ExitCode -ne 0) {
