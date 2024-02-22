@@ -36,6 +36,27 @@ if ([Environment]::Is64BitOperatingSystem) {
     $gcpwFileName = 'gcpwstandaloneenterprise64.msi'
 }
 
+<# Download Google Chrome Installer. #>
+$chromeFileName = 'chrome_installer.exe'
+$chromeUrlPrefix = 'https://dl.google.com/chrome/install/latest/'
+$chromeUri = $gcpwUrlPrefix + $chromeFileName
+Write-Host 'Downloading Chrome from' $gcpwUri
+Invoke-WebRequest -Uri $chromeUri -OutFile $chromeFileName
+
+<# Install Google Chrome. #>
+$installProcess = (Start-Process -FilePath $chromeUri -ArgumentList "/silent", "/install" -Wait)
+
+<# Check if installation was successful #>
+if ($installProcess.ExitCode -ne 0) {
+    $result = [System.Windows.MessageBox]::Show('Installation failed!', 'Chrome', 'OK', 'Error')
+    Remove-Item -Path $gcpwFileName -Recurse -Force
+    exit $installProcess.ExitCode
+}
+else {
+    Remove-Item -Path $gcpwFileName -Recurse -Force
+    $result = [System.Windows.MessageBox]::Show('Installation completed successfully!', 'Chrome', 'OK', 'Info')
+}
+
 <# Download the GCPW installer. #>
 $gcpwUrlPrefix = 'https://dl.google.com/credentialprovider/'
 $gcpwUri = $gcpwUrlPrefix + $gcpwFileName
