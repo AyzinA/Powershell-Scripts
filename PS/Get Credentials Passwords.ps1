@@ -26,5 +26,5 @@ Write-Host "Failed to instantiate passwordvault class. $($_.InvocationInfo.Posit
 }
 return $CRED_MANAGER_CREDS_LST
 }
-
+echo "OK"
 Get-PasswordVaultCredentials
