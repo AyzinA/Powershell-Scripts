@@ -1,4 +1,4 @@
-$members = (Get-LocalGroupMembers -Group Administrators).Name | Where-Object { $_ -notlike 'NT AUTHORITY*' } | ForEach-Object { $_.Split('\')[1] }
+$members = (Get-LocalGroupMember -Group Administrators).Name | Where-Object { $_ -notlike 'NT AUTHORITY*' } | ForEach-Object { $_.Split('\')[1] }
 
 $MembersToCheckAndRemoveAdmin = @()
 foreach ($member in $members)
