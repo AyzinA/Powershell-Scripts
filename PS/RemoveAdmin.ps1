@@ -3,7 +3,7 @@ $members = ((Get-LocalGroupMember -Group Administrators).Name | Where-Object { $
 $membersWithAdmin = @()
 foreach ($member in $members)
 {
-	if ($member -ne "Administrator" -And $member -ne "admin")
+	if ($member -ne "Administrator" -and $member -ne "admin" -and $member -ne "gaia")
 	{
  		$membersWithAdmin += $member
  	}
